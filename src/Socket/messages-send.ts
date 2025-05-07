@@ -800,10 +800,13 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 				 if(isAiMsg) {
 					additionalNodes.push({
 						attrs: {
-							biz_bot: '1'
+						biz_bot: '1'
 						},
 						tag: "bot"
-					})
+						}, {
+						attrs: {},
+						tag: "biz"
+						})
 				}
 
 				if('cachedGroupMetadata' in options) {
