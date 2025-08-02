@@ -142,39 +142,39 @@ type RequestPhoneNumber = {
 export type MediaType = keyof typeof MEDIA_HKDF_KEY_MAPPING
 export type AnyMediaMessageContent = (
 	| ({
-			image: WAMediaUpload
-			caption?: string
-			jpegThumbnail?: string
-	  } & Mentionable &
-			Contextable &
-			WithDimensions)
+		image: WAMediaUpload
+		caption?: string
+		jpegThumbnail?: string
+	} & Mentionable &
+		Contextable &
+		WithDimensions)
 	| ({
-			video: WAMediaUpload
-			caption?: string
-			gifPlayback?: boolean
-			jpegThumbnail?: string
-			/** if set to true, will send as a `video note` */
-			ptv?: boolean
-	  } & Mentionable &
-			Contextable &
-			WithDimensions)
+		video: WAMediaUpload
+		caption?: string
+		gifPlayback?: boolean
+		jpegThumbnail?: string
+		/** if set to true, will send as a `video note` */
+		ptv?: boolean
+	} & Mentionable &
+		Contextable &
+		WithDimensions)
 	| {
-			audio: WAMediaUpload
-			/** if set to true, will send as a `voice note` */
-			ptt?: boolean
-			/** optionally tell the duration of the audio */
-			seconds?: number
-	  }
+		audio: WAMediaUpload
+		/** if set to true, will send as a `voice note` */
+		ptt?: boolean
+		/** optionally tell the duration of the audio */
+		seconds?: number
+	}
 	| ({
-			sticker: WAMediaUpload
-			isAnimated?: boolean
-	  } & WithDimensions)
+		sticker: WAMediaUpload
+		isAnimated?: boolean
+	} & WithDimensions)
 	| ({
-			document: WAMediaUpload
-			mimetype: string
-			fileName?: string
-			caption?: string
-	  } & Contextable)
+		document: WAMediaUpload
+		mimetype: string
+		fileName?: string
+		caption?: string
+	} & Contextable)
 ) & { mimetype?: string } & Editable
 
 export type ButtonReplyInfo = {
@@ -197,51 +197,51 @@ export type WASendableProduct = Omit<proto.Message.ProductMessage.IProductSnapsh
 
 export type AnyRegularMessageContent = (
 	| ({
-			text: string
-			linkPreview?: WAUrlInfo | null
-	  } & Mentionable &
-			Contextable &
-			Editable)
+		text: string
+		linkPreview?: WAUrlInfo | null
+	} & Mentionable &
+		Contextable &
+		Editable)
 	| AnyMediaMessageContent
 	| ({
-			poll: PollMessageOptions
-	  } & Mentionable &
-			Contextable &
-			Editable)
+		poll: PollMessageOptions
+	} & Mentionable &
+		Contextable &
+		Editable)
 	| {
-			contacts: {
-				displayName?: string
-				contacts: proto.Message.IContactMessage[]
-			}
-	  }
+		contacts: {
+			displayName?: string
+			contacts: proto.Message.IContactMessage[]
+		}
+	}
 	| {
-			location: WALocationMessage
-	  }
+		location: WALocationMessage
+	}
 	| { react: proto.Message.IReactionMessage }
 	| {
-			buttonReply: ButtonReplyInfo
-			type: 'template' | 'plain'
-	  }
+		buttonReply: ButtonReplyInfo
+		type: 'template' | 'plain'
+	}
 	| {
-			groupInvite: GroupInviteInfo
-	  }
+		groupInvite: GroupInviteInfo
+	}
 	| {
-			listReply: Omit<proto.Message.IListResponseMessage, 'contextInfo'>
-	  }
+		listReply: Omit<proto.Message.IListResponseMessage, 'contextInfo'>
+	}
 	| {
-			pin: WAMessageKey
-			type: proto.PinInChat.Type
-			/**
-			 * 24 hours, 7 days, 30 days
-			 */
-			time?: 86400 | 604800 | 2592000
-	  }
+		pin: WAMessageKey
+		type: proto.PinInChat.Type
+		/**
+		 * 24 hours, 7 days, 30 days
+		 */
+		time?: 86400 | 604800 | 2592000
+	}
 	| {
-			product: WASendableProduct
-			businessOwnerJid?: string
-			body?: string
-			footer?: string
-	  }
+		product: WASendableProduct
+		businessOwnerJid?: string
+		body?: string
+		footer?: string
+	}
 	| SharePhoneNumber
 	| RequestPhoneNumber
 ) &
@@ -250,16 +250,16 @@ export type AnyRegularMessageContent = (
 export type AnyMessageContent =
 	| AnyRegularMessageContent
 	| {
-			forward: WAMessage
-			force?: boolean
-	  }
+		forward: WAMessage
+		force?: boolean
+	}
 	| {
-			/** Delete your message or anyone's message in a group (admin required) */
-			delete: WAMessageKey
-	  }
+		/** Delete your message or anyone's message in a group (admin required) */
+		delete: WAMessageKey
+	}
 	| {
-			disappearingMessagesInChat: boolean | number
-	  }
+		disappearingMessagesInChat: boolean | number
+	}
 
 export type GroupMetadataParticipants = Pick<GroupMetadata, 'participants'>
 
@@ -283,22 +283,17 @@ export type MessageRelayOptions = MinimalRelayOptions & {
 }
 
 export type MiscMessageGenerationOptions = MinimalRelayOptions & {
-	/** optional, if you want to manually set the timestamp of the message */
 	timestamp?: Date
-	/** the message you want to quote */
 	quoted?: WAMessage
-	/** disappearing messages settings */
 	ephemeralExpiration?: number | string
-	/** timeout for media upload to WA server */
 	mediaUploadTimeoutMs?: number
-	/** jid list of participants for status@broadcast */
 	statusJidList?: string[]
-	/** backgroundcolor for status */
 	backgroundColor?: string
-	/** font type for status */
 	font?: number
-	/** if it is broadcast */
 	broadcast?: boolean
+	cachedGroupMetadata?: any
+	additionalNodes?: BinaryNode[]
+
 }
 export type MessageGenerationOptionsFromContent = MiscMessageGenerationOptions & {
 	userJid: string

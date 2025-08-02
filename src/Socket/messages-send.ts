@@ -867,7 +867,13 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 					)
 				}
 
-				await relayMessage(jid, fullMsg.message!, { messageId: fullMsg.key.id, cachedGroupMetadata: options.cachedGroupMetadata, additionalNodes: isAiMsg ? additionalNodes : options.additionalNodes, additionalAttributes, statusJidList: options.statusJidList })
+				await relayMessage(jid, fullMsg.message!, {
+					messageId: fullMsg.key.id!,
+					useCachedGroupMetadata: options.useCachedGroupMetadata,
+					additionalAttributes,
+					statusJidList: options.statusJidList,
+					additionalNodes
+				})
 				if (config.emitOwnEvents) {
 					process.nextTick(() => {
 						processingMutex.mutex(() => upsertMessage(fullMsg, 'append'))
