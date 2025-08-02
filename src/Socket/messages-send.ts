@@ -855,10 +855,7 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 							biz_bot: '1'
 						},
 						tag: 'bot'
-					});
-					if (options.additionalNodes) {
-						additionalNodes.push(...options.additionalNodes);
-					}
+					})
 				}
 
 				if ('cachedGroupMetadata' in options) {
