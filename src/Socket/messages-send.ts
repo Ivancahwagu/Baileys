@@ -629,7 +629,7 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 			}
 
 			if (shouldIncludeDeviceIdentity) {
-				;(stanza.content as BinaryNode[]).push({
+				; (stanza.content as BinaryNode[]).push({
 					tag: 'device-identity',
 					attrs: {},
 					content: encodeSignedDeviceIdentity(authState.creds.account!, true)
@@ -639,7 +639,7 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 			}
 
 			if (additionalNodes && additionalNodes.length > 0) {
-				;(stanza.content as BinaryNode[]).push(...additionalNodes)
+				; (stanza.content as BinaryNode[]).push(...additionalNodes)
 			}
 
 			logger.debug({ msgId }, `sending message to ${participants.length} devices`)
@@ -823,6 +823,7 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 					messageId: generateMessageIDV2(sock.user?.id),
 					...options
 				})
+				const isAiMsg = 'ai' in content && !!content.ai;
 				const isDeleteMsg = 'delete' in content && !!content.delete
 				const isEditMsg = 'edit' in content && !!content.edit
 				const isPinMsg = 'pin' in content && !!content.pin
@@ -848,6 +849,16 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 							polltype: 'creation'
 						}
 					} as BinaryNode)
+				} else if (isAiMsg) {
+					additionalNodes.push({
+						attrs: {
+							biz_bot: '1'
+						},
+						tag: 'bot'
+					});
+					if (options.additionalNodes) {
+						additionalNodes.push(...options.additionalNodes);
+					}
 				}
 
 				if ('cachedGroupMetadata' in options) {
@@ -856,13 +867,7 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 					)
 				}
 
-				await relayMessage(jid, fullMsg.message!, {
-					messageId: fullMsg.key.id!,
-					useCachedGroupMetadata: options.useCachedGroupMetadata,
-					additionalAttributes,
-					statusJidList: options.statusJidList,
-					additionalNodes
-				})
+				await relayMessage(jid, fullMsg.message!, { messageId: fullMsg.key.id, cachedGroupMetadata: options.cachedGroupMetadata, additionalNodes: isAiMsg ? additionalNodes : options.additionalNodes, additionalAttributes, statusJidList: options.statusJidList })
 				if (config.emitOwnEvents) {
 					process.nextTick(() => {
 						processingMutex.mutex(() => upsertMessage(fullMsg, 'append'))
